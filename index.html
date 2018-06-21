@@ -18,12 +18,9 @@
     <section id="animation" data-quantity="20">
         <div class="container">
             <div class="row">
-                <div class="col-sm-2">
+                <div class="col">
                     <input type="text" name="quantity" placeholder="ilosc img">
                     <button>START</button>
-                </div>
-                <div class="col-sm-10">
-                    <h1>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores ratione tempore soluta saepe obcaecati laborum culpa, excepturi, adipisci aperiam voluptatum possimus officia inventore quam atque dicta voluptates fugiat ut suscipit!</h1>
                 </div>
             </div>
         </div>
@@ -42,30 +39,42 @@
         var spaceAnim = $(document).find('#animation'); // przestrzen animacji
         var elQuantity = $(spaceAnim).data('quantity'); // ilosc img              
         
-        var windowW = ($(window).width()) - imgW; // szerokosc okna - szerokosc img
+        var windowW = ($(window).width()) - imgW;
         var windowH = $(window).height();
 
-        $(document).ready(function(){
-            // createEl();
+        var arrayPos = [];
+        
+        $('button').on('click', function() {
+            elQuantity = $(document).find('input[name="quantity"]').val();            
+            for (let i = 0; i < elQuantity; i++) {
+                randomPos();                
+            }
+            console.log(arrayPos);
+            createEl();            
         });
 
-        $('button').on('click', function() {
-            elQuantity = $(document).find('input[name="quantity"]').val();
-            console.log(elQuantity/2);
-            
-            createEl();
+        $(document).ready(function(){
+
+            // for (let i = 0; i < elQuantity; i++) {
+            //     randomPos();                
+            // }
+            // createEl();       
+
         });
 
         /* Tworzenie img w losownych pozycjach */
         function createEl() {
-            for (let i = 0; i < elQuantity/2; ++i) {
+            for (let i = 0; i < elQuantity; i++) {
+                console.log(i%2);
                 
-                if (i % 2 == 0)
-                    var elHeart = "<img src='serce.svg' alt='' style='left:"+randomPosL()+"px; bottom:"+randomPosB()+"px;'>";
-                else 
-                    var elHeartPanda = "<img src='serce_panda.svg' alt='' style='left:"+randomPosL()+"px; bottom:"+randomPosB()+"px;'>";
+                if (i % 2 == 0) {
+                    var elHeart = "<img src='serce.svg' alt='' style='left:"+arrayPos[i][0]+"px; bottom:"+arrayPos[i][1]+"px;'>";
+                    spaceAnim.append(elHeart);
+                } else {
+                    var elHeartPanda = "<img src='serce_panda.svg' alt='' style='left:"+arrayPos[i][0]+"px; bottom:"+arrayPos[i][1]+"px;'>";
+                    spaceAnim.append(elHeartPanda);
+                }
 
-                spaceAnim.append(elHeart, elHeartPanda);
             }
             startAnim();
         }
@@ -75,7 +84,7 @@
     
             $(spaceAnim).find('img').each(function (id) {
                                
-                var delay = 100 * parseInt(id);                           
+                var delay = 100 * parseInt(id);                                          
 
                 $(this).delay(delay).animate({
                     opacity: 0,
@@ -88,21 +97,33 @@
 
         }
 
-        /* Losowanie początkowego 'left' */
-        function randomPosL() {
+        /* Losowanie niepowtarzalnej poczatkowej pozycji dla kazdego img */
+        function randomPos() {
+
             var l = Math.floor(Math.random() * windowW);
-            return l;
-        }
-        
-        /* Losowanie początkowego 'bottom' */
-        function randomPosB() {
             var b = -(Math.floor(Math.random() * 200) + imgH);
-            return b;
+
+            if (arrayPos.length != 0) {
+                for (let i = 0; i < arrayPos.length; i++) {
+                    if (arrayPos[i][0] != l) {
+                        setArrayPos(l,b);
+                        break;
+                    } else {
+                        randomPos();
+                    }
+                }               
+            } else {
+                setArrayPos(l,b);
+            }
+        }
+
+        function setArrayPos(left, bottom) {
+            arrayPos.push([left,bottom]);
         }
 
         /* Losowanie czasu trwania animacji dla kazdego img */
         function randomTime() {
-            var t = Math.floor(Math.random() * 3000) + 2000; // losowanie czasu od 2 do 4 sec
+            var t = Math.floor(Math.random() * 2000) + 2000; // losowanie czasu od 2 do 4 sec
             return t;
         }
         
