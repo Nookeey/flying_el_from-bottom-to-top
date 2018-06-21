@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <title>Document</title>
+
+    <style>
+        #animation { position: relative; height: 100vh; overflow: hidden; }
+        #animation img { position: absolute; width: 50px; height: 50px; }
+        
+    </style>
+</head>
+<body>
+
+    <section id="animation" data-quantity="20">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-2">
+                    <input type="text" name="quantity" placeholder="ilosc img">
+                    <button>START</button>
+                </div>
+                <div class="col-sm-10">
+                    <h1>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores ratione tempore soluta saepe obcaecati laborum culpa, excepturi, adipisci aperiam voluptatum possimus officia inventore quam atque dicta voluptates fugiat ut suscipit!</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <script src="jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>    
+
+    
+    <script>
+        var imgW = 50; // szerokosc img
+        var imgH = 50; // wysokosc img
+
+        var spaceAnim = $(document).find('#animation'); // przestrzen animacji
+        var elQuantity = $(spaceAnim).data('quantity'); // ilosc img              
+        
+        var windowW = ($(window).width()) - imgW; // szerokosc okna - szerokosc img
+        var windowH = $(window).height();
+
+        $(document).ready(function(){
+            // createEl();
+        });
+
+        $('button').on('click', function() {
+            elQuantity = $(document).find('input[name="quantity"]').val();
+            console.log(elQuantity/2);
+            
+            createEl();
+        });
+
+        /* Tworzenie img w losownych pozycjach */
+        function createEl() {
+            for (let i = 0; i < elQuantity/2; ++i) {
+                
+                if (i % 2 == 0)
+                    var elHeart = "<img src='serce.svg' alt='' style='left:"+randomPosL()+"px; bottom:"+randomPosB()+"px;'>";
+                else 
+                    var elHeartPanda = "<img src='serce_panda.svg' alt='' style='left:"+randomPosL()+"px; bottom:"+randomPosB()+"px;'>";
+
+                spaceAnim.append(elHeart, elHeartPanda);
+            }
+            startAnim();
+        }
+
+        function startAnim() {
+            console.log('startAnim');          
+    
+            $(spaceAnim).find('img').each(function (id) {
+                               
+                var delay = 100 * parseInt(id);                           
+
+                $(this).delay(delay).animate({
+                    opacity: 0,
+                    bottom: windowH,
+                }, randomTime(), "linear", function() {
+                    console.log('koniec');                    
+                });              
+                
+            });
+
+        }
+
+        /* Losowanie początkowego 'left' */
+        function randomPosL() {
+            var l = Math.floor(Math.random() * windowW);
+            return l;
+        }
+        
+        /* Losowanie początkowego 'bottom' */
+        function randomPosB() {
+            var b = -(Math.floor(Math.random() * 200) + imgH);
+            return b;
+        }
+
+        /* Losowanie czasu trwania animacji dla kazdego img */
+        function randomTime() {
+            var t = Math.floor(Math.random() * 3000) + 2000; // losowanie czasu od 2 do 4 sec
+            return t;
+        }
+        
+    </script>
+
+
+</body>
+</html>
