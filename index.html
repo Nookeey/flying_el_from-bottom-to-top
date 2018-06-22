@@ -5,17 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="panda-animations.css">
     <title>Document</title>
 
-    <style>
-        #animation { position: relative; height: 100vh; overflow: hidden; }
-        #animation img { position: absolute; width: 50px; height: 50px; }
-        
-    </style>
 </head>
-<body>
+<body id="panda-animation">
 
-    <section id="animation" data-quantity="20">
+    <!-- <section id="animation">
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -24,110 +20,13 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
 
     <script src="jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>    
-
-    
-    <script>
-        var imgW = 50; // szerokosc img
-        var imgH = 50; // wysokosc img
-
-        var spaceAnim = $(document).find('#animation'); // przestrzen animacji
-        var elQuantity = $(spaceAnim).data('quantity'); // ilosc img              
-        
-        var windowW = ($(window).width()) - imgW;
-        var windowH = $(window).height();
-
-        var arrayPos = [];
-        
-        $('button').on('click', function() {
-            elQuantity = $(document).find('input[name="quantity"]').val();            
-            for (let i = 0; i < elQuantity; i++) {
-                randomPos();                
-            }
-            console.log(arrayPos);
-            createEl();            
-        });
-
-        $(document).ready(function(){
-
-            // for (let i = 0; i < elQuantity; i++) {
-            //     randomPos();                
-            // }
-            // createEl();       
-
-        });
-
-        /* Tworzenie img w losownych pozycjach */
-        function createEl() {
-            for (let i = 0; i < elQuantity; i++) {
-                console.log(i%2);
-                
-                if (i % 2 == 0) {
-                    var elHeart = "<img src='serce.svg' alt='' style='left:"+arrayPos[i][0]+"px; bottom:"+arrayPos[i][1]+"px;'>";
-                    spaceAnim.append(elHeart);
-                } else {
-                    var elHeartPanda = "<img src='serce_panda.svg' alt='' style='left:"+arrayPos[i][0]+"px; bottom:"+arrayPos[i][1]+"px;'>";
-                    spaceAnim.append(elHeartPanda);
-                }
-
-            }
-            startAnim();
-        }
-
-        function startAnim() {
-            console.log('startAnim');          
-    
-            $(spaceAnim).find('img').each(function (id) {
-                               
-                var delay = 100 * parseInt(id);                                          
-
-                $(this).delay(delay).animate({
-                    opacity: 0,
-                    bottom: windowH,
-                }, randomTime(), "linear", function() {
-                    console.log('koniec');                    
-                });              
-                
-            });
-
-        }
-
-        /* Losowanie niepowtarzalnej poczatkowej pozycji dla kazdego img */
-        function randomPos() {
-
-            var l = Math.floor(Math.random() * windowW);
-            var b = -(Math.floor(Math.random() * 200) + imgH);
-
-            if (arrayPos.length != 0) {
-                for (let i = 0; i < arrayPos.length; i++) {
-                    if (arrayPos[i][0] != l) {
-                        setArrayPos(l,b);
-                        break;
-                    } else {
-                        randomPos();
-                    }
-                }               
-            } else {
-                setArrayPos(l,b);
-            }
-        }
-
-        function setArrayPos(left, bottom) {
-            arrayPos.push([left,bottom]);
-        }
-
-        /* Losowanie czasu trwania animacji dla kazdego img */
-        function randomTime() {
-            var t = Math.floor(Math.random() * 2000) + 2000; // losowanie czasu od 2 do 4 sec
-            return t;
-        }
-        
-    </script>
+    <script src="panda-animations.js"></script>
 
 
 </body>
